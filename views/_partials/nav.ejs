@@ -1,16 +1,23 @@
 <%
-  const e = s => String(s || '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
-  const _brand = typeof BRAND_NAME !== 'undefined' ? BRAND_NAME : 'Hormonize';
-  const path = typeof currentPath !== 'undefined' ? currentPath : '/';
+  // Aktívna nav položka podľa aktuálnej URL
+  const _brand = (typeof BRAND_NAME !== 'undefined' && BRAND_NAME) ? BRAND_NAME : 'Hormonize';
+  const _path  = typeof locals.currentPath !== 'undefined' ? locals.currentPath : (locals.req ? locals.req.path : '');
+  const isActive = href => _path === href || (_path.startsWith(href) && href !== '/') ? ' active' : '';
 %>
-<nav>
-  <div class="navInner">
-    <a href="/" class="logo"><%= e(_brand) %></a>
-    <ul class="navLinks">
-      <li><a href="/" class="<%= path === '/' ? 'active' : '' %>">Domov</a></li>
-      <li><a href="/courses" class="<%= path.startsWith('/courses') ? 'active' : '' %>">Kurzy</a></li>
-      <li><a href="/contact" class="<%= path === '/contact' ? 'active' : '' %> hideOnMobile">Kontakt</a></li>
-      <li><a href="/login" class="<%= path === '/login' ? 'active' : '' %>">Prihlásenie</a></li>
-    </ul>
+<header class="top">
+  <div class="topInner">
+    <a class="brand" href="/">
+      <span class="mark">H</span>
+      <span class="brandText">
+        <b><%= _brand.toUpperCase() %></b>
+        <small>Courses &bull; Offline &amp; Online</small>
+      </span>
+    </a>
+
+    <nav class="nav">
+      <a href="/courses" class="<%= isActive('/courses') %>">Kurzy</a>
+      <a href="/contact" class="<%= isActive('/contact') %>">Kontakt</a>
+      <a class="pill<%= isActive('/login') %>" href="/login">Prihlásenie</a>
+    </nav>
   </div>
-</nav>
+</header>
