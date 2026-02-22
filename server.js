@@ -107,6 +107,7 @@ app.get("/account", (req, res) => res.render("account", ctx()));
 app.get("/privacy", (req, res) => res.render("privacy", ctx()));
 app.get("/terms", (req, res) => res.render("terms", ctx()));
 app.get("/contact", (req, res) => res.render("contact", ctx()));
+app.get("/thanks", (req, res) => res.render("thanks", ctx()));
 
 // Probe (pre CloudLinux)
 app.get("/__probe", (req, res) => {

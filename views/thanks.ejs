@@ -1,1 +1,36 @@
+<%
+  const body = `
+  <section class="pageHead">
+    <h1>Ďakujeme!</h1>
+    <p class="muted">Tvoja objednávka bola úspešne spracovaná.</p>
+  </section>
 
+  <section class="grid3">
+    <div class="panel">
+      <h3>Prístup ku kurzu</h3>
+      <p>Prihlasovacie údaje ti boli odoslané emailom. Skontroluj aj spam.</p>
+      <a class="btn primary" href="/account">Môj účet</a>
+    </div>
+    <div class="panel">
+      <h3>Faktúra</h3>
+      <p>Faktúru nájdeš vo svojom účte v sekcii objednávok.</p>
+    </div>
+    <div class="panel">
+      <h3>Podpora</h3>
+      <p>Potrebuješ pomoc? Kontaktuj nás na ${typeof SUPPORT_EMAIL !== 'undefined' ? SUPPORT_EMAIL : 'info@harmonize.sk'}</p>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="panel">
+      <h3>Čo ďalej?</h3>
+      <p class="lead">Odporúčame ti prihlásiť sa do svojho účtu a začať s prvou lekciou.</p>
+      <div class="cta">
+        <a class="btn primary" href="/login">Prihlásiť sa</a>
+        <a class="btn" href="/courses">Zobraziť kurzy</a>
+      </div>
+    </div>
+  </section>
+  `;
+%>
+<%- include("layout", { title: "Ďakujeme za objednávku", ...locals, body }) %>

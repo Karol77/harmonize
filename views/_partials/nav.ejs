@@ -1,0 +1,16 @@
+<%
+  const e = s => String(s || '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+  const _brand = typeof BRAND_NAME !== 'undefined' ? BRAND_NAME : 'Hormonize';
+  const path = typeof currentPath !== 'undefined' ? currentPath : '/';
+%>
+<nav>
+  <div class="navInner">
+    <a href="/" class="logo"><%= e(_brand) %></a>
+    <ul class="navLinks">
+      <li><a href="/" class="<%= path === '/' ? 'active' : '' %>">Domov</a></li>
+      <li><a href="/courses" class="<%= path.startsWith('/courses') ? 'active' : '' %>">Kurzy</a></li>
+      <li><a href="/contact" class="<%= path === '/contact' ? 'active' : '' %> hideOnMobile">Kontakt</a></li>
+      <li><a href="/login" class="<%= path === '/login' ? 'active' : '' %>">Prihlásenie</a></li>
+    </ul>
+  </div>
+</nav>

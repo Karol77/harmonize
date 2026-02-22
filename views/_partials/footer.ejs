@@ -1,0 +1,49 @@
+<%
+  const e = s => String(s || '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+  const _brand = typeof BRAND_NAME !== 'undefined' ? BRAND_NAME : 'Hormonize';
+  const _email = typeof SUPPORT_EMAIL !== 'undefined' ? SUPPORT_EMAIL : 'info@harmonize.sk';
+  const year = new Date().getFullYear();
+%>
+<footer>
+  <div class="footInner">
+    <div>
+      <div class="footBrand"><%= e(_brand) %></div>
+      <p class="footDesc">
+        Prémiová platforma pre osobný rast, vedomé financie a životnú stabilitu.
+        Offline aj online kurzy s jedinečným prístupom.
+      </p>
+    </div>
+
+    <div class="footCol">
+      <h4>Kurzy</h4>
+      <ul>
+        <li><a href="/courses">Všetky kurzy</a></li>
+        <li><a href="/courses#online">Online kurzy</a></li>
+        <li><a href="/courses#offline">Offline programy</a></li>
+        <li><a href="/account">Môj účet</a></li>
+      </ul>
+    </div>
+
+    <div class="footCol">
+      <h4>Podpora</h4>
+      <ul>
+        <li><a href="/contact">Kontakt</a></li>
+        <li><a href="mailto:<%= e(_email) %>">Email podpora</a></li>
+        <li><a href="/terms">FAQ</a></li>
+      </ul>
+    </div>
+
+    <div class="footCol">
+      <h4>Právne</h4>
+      <ul>
+        <li><a href="/privacy">Privacy Policy</a></li>
+        <li><a href="/terms">Terms & Conditions</a></li>
+        <li><a href="/terms#disclaimer">Disclaimer</a></li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="footBottom">
+    &copy; <%= year %> <%= e(_brand) %>. Všetky práva vyhradené.
+  </div>
+</footer>
