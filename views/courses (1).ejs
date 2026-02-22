@@ -1,0 +1,32 @@
+<%
+  const e = s => String(s || '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+  const _courses = Array.isArray(courses) ? courses : [];
+  const _apiDown = typeof apiDown !== 'undefined' ? !!apiDown : false;
+
+  const body = `
+  <section class="pageHead">
+    <h1>Kurzy</h1>
+    <p class="muted">Zverejnené kurzy a programy. Offline aj online.</p>
+    ${_apiDown ? `<div class="note warn">API je dočasne nedostupné.</div>` : ''}
+  </section>
+
+  <section class="cards">
+    ${
+      _courses.length
+        ? _courses.map(c => `
+          <a class="card" href="/courses/${e(c.slug)}">
+            <div class="cardTag">${c.type === 'online' ? 'Online' : 'Offline'}</div>
+            <div class="cardTitle">${e(c.title_sk)}</div>
+            <div class="cardDesc">${e((c.desc_sk || '').slice(0, 160))}${(c.desc_sk && c.desc_sk.length > 160) ? '…' : ''}</div>
+            <div class="cardFoot">
+              <span>${Number(c.price || 0).toFixed(2)} ${e(c.currency || 'EUR')}</span>
+              <span class="muted">Detail →</span>
+            </div>
+          </a>
+        `).join('')
+        : `<div class="muted">Zatiaľ nie sú zverejnené kurzy.</div>`
+    }
+  </section>
+  `;
+%>
+<%- include("layout", { title: "Kurzy", metaDescription: "Kurzy Hormonize – offline aj online programy.", ...locals, body }) %>

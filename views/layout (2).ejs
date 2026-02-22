@@ -1,0 +1,36 @@
+<!doctype html>
+<%
+  const pageTitle = (typeof title !== "undefined" && title) ? title : null;
+  const pageDesc =
+    (typeof metaDescription !== "undefined" && metaDescription)
+      ? metaDescription
+      : "Prémiové offline a online kurzy pre osobný rast, vedomé financie a životnú stabilitu.";
+%>
+<html lang="sk">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+	<title><%= pageTitle ? `${pageTitle} — ${BRAND_NAME}` : `${BRAND_NAME} — Kurzy & transformácia` %></title>
+	<meta name="description" content="<%= pageDesc %>" />
+	<meta property="og:title" content="<%= pageTitle ? `${pageTitle} — ${BRAND_NAME}` : BRAND_NAME %>" />
+	<meta property="og:description" content="<%= pageDesc %>" />
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="<%= BASE_URL %>" />
+  <link rel="icon" href="/public/assets/favicon.ico" />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;600&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/public/site.css" />
+</head>
+<body>
+  <%- include("_partials/nav") %>
+
+  <main class="wrap">
+    <%- body %>
+  </main>
+
+  <%- include("_partials/footer") %>
+
+  <script src="/public/site.js"></script>
+</body>
+</html>

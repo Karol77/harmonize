@@ -1,0 +1,26 @@
+<%
+  const body = `
+  <section class="pageHead">
+    <h1>Privacy</h1>
+    <p class="muted">Zásady ochrany osobných údajov (GDPR).</p>
+  </section>
+
+  <section class="panel prose">
+    <h3>1. Prevádzkovateľ</h3>
+    <p>Doplň IČO, sídlo, zápis.</p>
+
+    <h3>2. Aké údaje spracúvame</h3>
+    <ul>
+      <li>email, fakturačné údaje (pri nákupe)</li>
+      <li>údaje o objednávkach a prístupoch ku kurzom</li>
+    </ul>
+
+    <h3>3. Účel</h3>
+    <p>Registrácia, poskytovanie prístupu ku kurzom, fakturácia, podpora.</p>
+
+    <h3>4. Doba uchovania</h3>
+    <p>Podľa zákonných lehôt a oprávneného záujmu.</p>
+  </section>
+  `;
+%>
+<%- include("layout", { title: "Privacy", ...locals, body }) %>

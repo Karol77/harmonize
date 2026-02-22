@@ -1,0 +1,19 @@
+<%
+  const body = `
+  <section class="pageHead">
+    <h1>Prihlásenie</h1>
+    <p class="muted">Pošleme ti magic link na email. Bez hesla.</p>
+  </section>
+
+  <section class="panel">
+    <form class="form" onsubmit="return false;">
+      <label>Email</label>
+      <input id="email" type="email" placeholder="tvoj@email.sk" required />
+      <button class="btn primary" id="sendLink">Poslať magic link</button>
+      <div class="note" id="msg" style="display:none"></div>
+      <div class="muted tiny">Pozn.: v ďalšom kroku to napojíme na tvoj login server (api.harmonize.sk).</div>
+    </form>
+  </section>
+  `;
+%>
+<%- include("layout", { title: "Prihlásenie", ...locals, body }) %>

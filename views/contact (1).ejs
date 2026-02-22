@@ -1,0 +1,27 @@
+<%
+  const e = s => String(s || '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+  const _email = typeof SUPPORT_EMAIL !== 'undefined' ? SUPPORT_EMAIL : 'info@harmonize.sk';
+
+  const body = `
+  <section class="pageHead">
+    <h1>Kontakt</h1>
+    <p class="muted">Napíš nám a radi odporučíme správny kurz.</p>
+  </section>
+
+  <section class="grid3">
+    <div class="panel">
+      <h3>Email</h3>
+      <p><a href="mailto:${e(_email)}">${e(_email)}</a></p>
+    </div>
+    <div class="panel">
+      <h3>Spolupráca</h3>
+      <p>Firemné školenia, workshopy, B2B programy.</p>
+    </div>
+    <div class="panel">
+      <h3>Fakturácia</h3>
+      <p>Po spustení platformy budú faktúry automaticky v účte.</p>
+    </div>
+  </section>
+  `;
+%>
+<%- include("layout", { title: "Kontakt", ...locals, body }) %>

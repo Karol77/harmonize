@@ -1,0 +1,132 @@
+<%
+  // XSS ochrana
+  const e = s => String(s || '')
+    .replace(/&/g,'&amp;').replace(/</g,'&lt;')
+    .replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+
+  // URL encoding
+  const u = s => encodeURIComponent(String(s || '').trim());
+
+  // Bezpečný dátum (pre offline)
+  const fmtDate = d => {
+    if (!d) return "TBA";
+    try {
+      const dt = new Date(d);
+      if (isNaN(dt.getTime())) return String(d).replace('T',' ').slice(0,16);
+      return dt.toLocaleString('sk-SK', { dateStyle: 'short', timeStyle: 'short' });
+    } catch(_) {
+      return String(d).replace('T',' ').slice(0,16);
+    }
+  };
+
+  // Fallbacky
+  const _sessions = Array.isArray(sessions) ? sessions : [];
+  const _apiDown = typeof apiDown !== "undefined" ? !!apiDown : false;
+
+  if (!course) {
+    const body404 = `
+      <section class="pageHead">
+        <h1>Kurz nenájdený</h1>
+        <p class="muted">Skontroluj URL alebo sa vráť na zoznam kurzov.</p>
+        <a class="btn" href="/courses">Späť na kurzy</a>
+      </section>
+    `;
+%>
+    <%- include("layout", { title: "404", ...locals, body: body404 }) %>
+<%
+    return;
+  }
+
+  const isOnline = String(course.type || "").toLowerCase() === "online";
+
+  const price = Number(course.price || 0);
+  const currency = course.currency || "EUR";
+  const title = course.title_sk || "Kurz";
+  const desc = course.desc_sk || "";
+
+  const body = `
+  <section class="detail">
+    <div class="detailLeft">
+      <div class="chip"><span class="dot"></span> ${isOnline ? "Online kurz" : "Offline kurz"}</div>
+      <h1>${e(title)}</h1>
+      <p class="lead">${e(desc)}</p>
+
+      <div class="detailMeta">
+        <div class="metaBox">
+          <div class="muted">Cena</div>
+          <b>${price.toFixed(2)} ${e(currency)}</b>
+        </div>
+        <div class="metaBox">
+          <div class="muted">Forma</div>
+          <b>${e(isOnline ? "online" : "offline")}</b>
+        </div>
+      </div>
+
+      <div class="cta">
+        <a class="btn primary" href="#reserve">${isOnline ? "Kúpiť kurz" : "Rezervovať miesto"}</a>
+        <a class="btn" href="/courses">Späť</a>
+      </div>
+      ${_apiDown ? `<div class="note warn">Termíny sa nepodarilo načítať (API).</div>` : ``}
+    </div>
+
+    <div class="detailRight">
+      <div class="glassCard">
+        <div class="cardTitle">${isOnline ? "Prístup" : "Termíny"}</div>
+
+        ${
+          isOnline
+            ? `<div class="miniList">
+                <li>
+                  <div class="miniTop">
+                    <b>Okamžitý prístup</b>
+                    <span class="miniDate">Online</span>
+                  </div>
+                  <div class="miniMeta">Študuj vlastným tempom • neobmedzený prístup</div>
+                </li>
+               </div>`
+            : (_sessions.length
+                ? `<ul class="miniList">
+                    ${_sessions.map(s => {
+                      const when = fmtDate(s.start_at);
+                      const status = e(s.status || "scheduled");
+                      const loc = e(s.location_name || "Miesto doplníme");
+                      const cap = (s.capacity_total == null || s.capacity_total === "") ? "TBA" : e(String(s.capacity_total));
+                      return `
+                        <li>
+                          <div class="miniTop">
+                            <b>${e(when)}</b>
+                            <span class="miniDate">${status}</span>
+                          </div>
+                          <div class="miniMeta">${loc} • kapacita ${cap}</div>
+                        </li>
+                      `;
+                    }).join("")}
+                  </ul>`
+                : `<div class="muted">Zatiaľ bez termínov.</div>`
+              )
+        }
+      </div>
+    </div>
+  </section>
+
+  <section id="reserve" class="section">
+    <div class="panel">
+      <h3>${isOnline ? "Nákup a prístup" : "Rezervácia a platba"}</h3>
+      <p class="muted">
+        ${isOnline
+          ? "Platby spustíme cez Stripe. Zatiaľ nám napíš email a pošleme ti prístup."
+          : "Platby spustíme cez Stripe. Zatiaľ nám napíš email a rezervujeme miesto."
+        }
+      </p>
+      <div class="cta">
+        <a class="btn primary" href="mailto:${e(SUPPORT_EMAIL)}?subject=${u((isOnline ? "Nákup: " : "Rezervácia: ") + title)}">
+          ${isOnline ? "Požiadať o prístup emailom" : "Rezervovať emailom"}
+        </a>
+        <a class="btn" href="/login">Môj účet</a>
+      </div>
+    </div>
+  </section>
+  `;
+%>
+
+<%- include("layout", { title: title, metaDescription: desc.slice(0, 160), ...locals, body }) %>

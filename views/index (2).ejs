@@ -1,0 +1,100 @@
+<%
+  // XSS ochrana
+  const e = s => String(s || '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+
+  // Bezpečné formátovanie dátumu
+  const fmtDate = d => {
+    try { return new Date(d).toLocaleString('sk-SK', { dateStyle: 'short', timeStyle: 'short' }); }
+    catch(_) { return String(d || '').replace('T', ' ').slice(0, 16); }
+  };
+  const u = s => encodeURIComponent(String(s || '').trim());
+
+  // Fallbacky – nikdy nenastane ReferenceError
+  const _sessions = Array.isArray(sessions) ? sessions : [];
+  const _featured  = Array.isArray(featured)  ? featured  : [];
+  const _apiDown   = typeof apiDown !== 'undefined' ? !!apiDown : false;
+
+  // Zostav body ako string (rovnako ako originál)
+  const body = `
+  <section class="hero">
+    <div class="heroLeft">
+      <div class="chip"><span class="dot"></span> Premium kurzy • Offline &amp; Online</div>
+      <h1>Transformácia,<br/>ktorá sa dá udržať.</h1>
+      <p class="lead">
+        Hormonize je platforma pre osobný rast, vedomé financie a stabilitu.
+        Kurzy sú navrhnuté tak, aby priniesli reálnu zmenu – jednoducho, elegantne, bez chaosu.
+      </p>
+      <div class="cta">
+        <a class="btn primary" href="/courses">Zobraziť kurzy</a>
+        <a class="btn" href="/contact">Napísať</a>
+      </div>
+      ${_apiDown ? `<div class="note warn">API je dočasne nedostupné. Obsah sa načíta neskôr.</div>` : ''}
+    </div>
+
+    <div class="heroRight">
+      <div class="glassCard">
+        <div class="glow"></div>
+        <div class="cardTitle">Najbližšie termíny</div>
+        ${
+          _sessions.length
+            ? `<ul class="miniList">
+                ${_sessions.map(s => `
+                  <li>
+                    <div class="miniTop">
+                      <b>${e(s.title_sk)}</b>
+                      <span class="miniDate">${fmtDate(s.start_at)}</span>
+                    </div>
+                    <div class="miniMeta">${e(s.location_name) || 'Offline / Online'} • kapacita ${e(String(s.capacity_total))}</div>
+                    <a class="miniLink" href="/courses/${u(s.slug)}">Detail →</a>
+                  </li>
+                `).join('')}
+              </ul>`
+            : `<div class="muted">Zatiaľ nie sú zverejnené termíny.</div>`
+        }
+      </div>
+    </div>
+  </section>
+
+  <section class="grid3">
+    <div class="panel">
+      <h3>Offline zážitok</h3>
+      <p>Termíny, kapacity a jasná štruktúra. Bez improvizácie.</p>
+    </div>
+    <div class="panel">
+      <h3>Online knižnica</h3>
+      <p>Lekcie, videá, materiály a progres. Všetko v účte.</p>
+    </div>
+    <div class="panel">
+      <h3>Diskrétny luxus</h3>
+      <p>Minimalistický dizajn, bezpečnosť, bez zbytočného balastu.</p>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="sectionHead">
+      <h2>Vybrané kurzy</h2>
+      <a class="link" href="/courses">Zobraziť všetko →</a>
+    </div>
+
+    <div class="cards">
+      ${
+        _featured.length
+          ? _featured.map(c => `
+            <a class="card" href="/courses/${u(c.slug)}">
+              <div class="cardTag">${c.type === 'online' ? 'Online' : 'Offline'}</div>
+              <div class="cardTitle">${e(c.title_sk)}</div>
+              <div class="cardDesc">${e((c.desc_sk || '').slice(0, 140))}${(c.desc_sk && c.desc_sk.length > 140) ? '…' : ''}</div>
+              <div class="cardFoot">
+                <span>${Number(c.price || 0).toFixed(2)} ${e(c.currency || 'EUR')}</span>
+                <span class="muted">Detail →</span>
+              </div>
+            </a>
+          `).join('')
+          : `<div class="muted">Kurzy budú doplnené čoskoro.</div>`
+      }
+    </div>
+  </section>
+  `;
+%>
+
+<%- include("layout", { title: (BRAND_NAME || 'Hormonize') + ' – Premium kurzy', metaDescription: 'Platforma pre osobný rast, vedomé financie a stabilitu. Offline aj online kurzy.', ...locals, body }) %>

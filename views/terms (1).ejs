@@ -1,0 +1,20 @@
+<%
+  const body = `
+  <section class="pageHead">
+    <h1>Terms &amp; Disclaimer</h1>
+    <p class="muted">Obchodné podmienky a právne vyhlásenia.</p>
+  </section>
+
+  <section class="panel prose">
+    <h3>1. Charakter obsahu</h3>
+    <p>Kurzy majú edukatívny charakter a nenahrádzajú odbornú pomoc (medicínsku, právnu, finančnú).</p>
+
+    <h3>2. Objednávky, platby a storno</h3>
+    <p>Po spustení Stripe doplníme storno podmienky (offline termíny) a prístupové pravidlá (online).</p>
+
+    <h3>3. Autorské práva</h3>
+    <p>Materiály sú chránené autorským právom. Zakázané šírenie bez súhlasu.</p>
+  </section>
+  `;
+%>
+<%- include("layout", { title: "Terms", ...locals, body }) %>

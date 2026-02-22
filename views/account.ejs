@@ -1,0 +1,24 @@
+<%
+  const body = `
+  <section class="pageHead">
+    <h1>Môj účet</h1>
+    <p class="muted">Tu budú moje kurzy, prístup k videám a faktúry.</p>
+  </section>
+
+  <section class="grid3">
+    <div class="panel">
+      <h3>Moje kurzy</h3>
+      <p>Po napojení Stripe sa tu zobrazia zakúpené kurzy.</p>
+    </div>
+    <div class="panel">
+      <h3>Online knižnica</h3>
+      <p>Video lekcie a materiály – prístup len po kúpe.</p>
+    </div>
+    <div class="panel">
+      <h3>Objednávky</h3>
+      <p>História platieb a faktúr.</p>
+    </div>
+  </section>
+  `;
+%>
+<%- include("layout", { title: "Môj účet", ...locals, body }) %>
